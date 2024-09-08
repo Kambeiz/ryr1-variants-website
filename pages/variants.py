@@ -1,4 +1,4 @@
-from dash import html, dcc, callback, Input, Output, State, ALL
+from dash import html, dcc, Input, Output
 import dash_bootstrap_components as dbc
 import dash_molstar
 from dash_molstar.utils import molstar_helper
@@ -6,11 +6,20 @@ import os
 import dash
 from dash.exceptions import PreventUpdate
 
+# Define the directory and get the list of PDB files
+variants_dir = 'variants'
+pdb_files = [f for f in os.listdir(variants_dir) if f.endswith('.pdb')]
+
+# Define the layout of the app
 layout = html.Div([
     html.H2('Human RyR1 variants created from our two models'),
-    html.P('Enter the name or number of the PDB file you want to view:'),
-    dbc.Input(id='search-input', type='text', placeholder='Enter search term...', debounce=False),
-    html.Div(id='search-results'),
+    html.P('Start typing to search for a Variant file file:'),
+    dcc.Dropdown(
+        id='search-dropdown',
+        options=[{'label': f.split(".")[-2], 'value': f} for f in pdb_files[:5]],  # Default to first 5 files
+        placeholder='Type to search...',
+        style={'width': '85%'}
+    ),
     dash_molstar.MolstarViewer(
         id='variant-viewer',
         style={'width': '85vh', 'height': '60vh'},
@@ -22,52 +31,64 @@ layout = html.Div([
     )
 ])
 
+
 def register_callbacks(app):
     @app.callback(
-        Output('search-results', 'children'),
-        Input('search-input', 'value')
+        Output('search-dropdown', 'options'),
+        [Input('search-dropdown', 'search_value')]
     )
-    def search_variants(search_term):
-        if not search_term:
-            raise PreventUpdate
-
-        variants_dir = 'variants'
-        matching_files = [f for f in os.listdir(variants_dir) if search_term.lower() in f.lower() and f.endswith('.pdb')]
-
-        if not matching_files:
-            return html.P('No matching files found.')
-
-        return [html.Div(
-            dbc.Button(f, id={'type': 'variant-button', 'index': i}, n_clicks=0, color="link")
-        ) for i, f in enumerate(matching_files)]
+    def update_dropdown_options(search_value):
+        if search_value:
+            # Filter pdb_files based on search_value
+            matching_files = [f for f in pdb_files if search_value.lower() in f.lower()]
+            if not matching_files:
+                return []
+            return [{'label': f.split(".")[-2], 'value': f} for f in matching_files[:19]]  # Limit to 19 results
+        else:
+            # Show default subset of files if no search term
+            return [{'label': f.split(".")[-2], 'value': f} for f in pdb_files[:5]]
 
     @app.callback(
         Output('variant-viewer', 'data'),
-        Input('search-input', 'value'),
-        Input({'type': 'variant-button', 'index': ALL}, 'n_clicks'),
-        State({'type': 'variant-button', 'index': ALL}, 'children')
+        Input('search-dropdown', 'value')
     )
-    def load_variant(search_term, n_clicks, button_labels):
-        ctx = dash.callback_context
-        variants_dir = 'variants'
-
-        if not ctx.triggered:
+    def load_variant(selected_variant):
+        if not selected_variant:
             raise PreventUpdate
 
-        trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+        variant_path = os.path.join(variants_dir, selected_variant)
+        
+        # Ensure the selected variant exists in the full list of files
+        if selected_variant not in pdb_files or not os.path.exists(variant_path):
+            raise PreventUpdate
+        
+        # Parse the molecule and add the custom stick representation
+        return molstar_helper.parse_molecule(
+            variant_path,
+            component=create_molstar_component()  # Use the custom component
+        )
 
-        if trigger_id == 'search-input':
-            if search_term:
-                matching_files = [f for f in os.listdir(variants_dir) if search_term.lower() in f.lower() and f.endswith('.pdb')]
-                if matching_files:
-                    variant_file = matching_files[0]
-                else:
-                    raise PreventUpdate
-            else:
-                raise PreventUpdate
+    def create_molstar_component():
+        """Create a Molstar component with a stick representation."""
+        return molstar_helper.create_component(
+            label="Variant Representation",
+            targets=molstar_helper.get_targets(chain=None, residue=[]),  # Adjust targets accordingly
+            representation='ball-and-stick'  # Change representation type here to 'Ball & Stick'
+        )
+
+
+    def fetch_and_parse_pdb(url):
+        """Fetch and parse PDB file from an external website."""
+        response = requests.get(url)
+        if response.status_code == 200:
+            pdb_content = response.text
+            # Save the file temporarily if needed or directly parse from content
+            return molstar_helper.parse_molecule_from_string(pdb_content, format='pdb')
         else:
-            button_index = eval(trigger_id)['index']
-            variant_file = button_labels[button_index]
+            print("Failed to fetch the file.")
+            return None
 
-        variant_path = os.path.join(variants_dir, variant_file)
-        return molstar_helper.parse_molecule(variant_path)
+
+
+# Example usage of fetching from a URL
+# fetched_data = fetch_and_parse_pdb("https://example.com/path/to/pdb/file.pdb")

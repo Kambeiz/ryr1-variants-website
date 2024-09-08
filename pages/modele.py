@@ -14,12 +14,13 @@ layout = html.Div([
             {'label': 'Primed State', 'value': 'modeles_ryr1_human/Human_7M6A_fullv2_minimise.pdb'},
             {'label': 'Open State', 'value': 'modeles_ryr1_human/Human_7M6L_fullv2_minimise.pdb'}
         ],
-        value='modeles_ryr1_human/Human_7M6A_fullv2_minimise.pdb',
-        style={'width': '60%'}
+        # value='modeles_ryr1_human/Human_7M6A_fullv2_minimise.pdb',
+        value = None,
+        style={'width': '60vh'}
     ),
     dash_molstar.MolstarViewer(
         id='model-viewer',
-        style={'width': '80%', 'height': '75vh'},
+        style={'width': '85vh%', 'height': '68vh'},
         layout={
             'showSequence': True,
             'layoutShowControls': True,
@@ -34,6 +35,9 @@ def register_callbacks(app):
         [Input('model-selector', 'value')]
     )
     def update_model(selected_model):
+        if selected_model is None:
+            # Return empty data to prevent loading when nothing is selected
+            return {}
         chains = ['A', 'B', 'C', 'D']
         domains = {
             "NTD": list(range(1, 628)),

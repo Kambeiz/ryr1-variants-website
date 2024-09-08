@@ -1,3 +1,4 @@
+/* Global Styles */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -5,39 +6,47 @@ body {
     padding: 0;
 }
 
+/* Main Container */
 .container {
     width: 85vh;
     margin: 0 auto;
     padding: 20px;
-    text-align: center;
+    text-align: left;
 }
 
-#search-input{
+/* Search Input */
+#search-input {
     width: 85vh;
     margin: 0 auto;
     text-align: left;
 }
 
+/* Navbar Styling */
 .navbar {
-    background-color: #4a69bd;
+    background-color: #4a69bd !important; /* Override Bootstrap colors */
+    padding: 0.5rem 1rem;
 }
 
+/* Navbar Brand */
 .navbar-brand {
     color: #ffffff !important;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
+/* Navbar Links */
 .nav-link {
     color: #ffffff !important;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease;
 }
 
-img, iframe {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    border: none;
+.nav-link:hover {
+    background-color: #3b5998; /* Hover effect */
 }
 
+/* Responsive Adjustments */
 @media (max-width: 768px) {
     .container {
         width: 95%;

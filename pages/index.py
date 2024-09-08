@@ -8,14 +8,14 @@ layout = html.Div([
         html.P("Ryanodine Receptor 1"),
     ]),
     html.Div([
-        html.H2("Bienvenue sur le site dédié à l'étude de RyR1"),
-        html.P("Ce site a été créé dans le cadre d'une thèse sur la protéine RyR1 (Récepteur de la ryanodine de type 1). Vous trouverez ici des informations détaillées sur la structure, sa fonction et mon travail relatif sur la prédiction de phénotype de ces variants missense, modélisés pour l'occasion."),
-        html.P("Explorez les différentes sections pour en apprendre davantage sur :"),
+        html.H2("Welcome the website dedicated to RyR1 Missense Variants!"),
+        html.P("This website have been created for the purpose to show the work and results of my PhD thesis on the protein RyR1."),
+        html.P("Feel free to browse to learn about"),
         html.Ul([
-            html.Li("La Présentation générale de RyR1"),
-            html.Li("Modèles Humains de RyR1"),
-            html.Li("Variants de RyR1"),
+            html.Li("The Protein RyR1"),
+            html.Li("Human Models of RyR1"),
+            html.Li("RyR1 Variants"),
         ]),
-        html.P("N'hésitez pas à me contacter pour plus d'informations ou pour discuter de cette recherche."),
+        html.P("Feel free to contact me (see About me) for more informations or questions."),
     ]),
 ])

@@ -1,7 +1,6 @@
 import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-
 # Import of the page modules here
 import pages.index as index
 import pages.presentation as presentation
@@ -23,7 +22,7 @@ def nav_bar():
                     dbc.NavItem(dbc.NavLink('Variants', href='/variants', className="nav-link")),
                     dbc.NavItem(dbc.NavLink('About me', href='/contact', className="nav-link")),
                 ],
-                className="ml-auto d-flex align-items-center",  # Make Nav items horizontal
+                className="ml-auto d-flex align-items-center",
                 navbar=True
             ),
         ]),
@@ -32,11 +31,10 @@ def nav_bar():
         className="mb-4",
     )
 
-
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     nav_bar(),
-    html.Div(id='page-content', className='container')
+    html.Div(id='page-content', className='container-fluid')  
 ])
 
 @app.callback(dash.dependencies.Output('page-content', 'children'),

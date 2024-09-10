@@ -42,14 +42,83 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.nav-link:hover {
-    background-color: #3b5998; /* Hover effect */
+/* Main content container */
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
 }
 
-/* Responsive Adjustments */
+/* Molstar Viewer container */
+.molstar-container {
+    width: 48%;
+    display: inline-block;
+}
+
+/* DataTable container */
+.datatable-container {
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Molstar Viewer */
+#variant-viewer {
+    width: 100%;
+    height: 60vh;
+}
+
+
+
+/* Search Drop down*/
+#search-dropdown {
+    width: 50vh;
+}
+
+/* DataTable */
+.dash-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.dash-header {
+    background-color: rgb(230, 230, 230);
+    font-weight: bold;
+}
+
+.dash-cell {
+    text-align: left;
+    min-width: 100px;
+    width: 150px;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .container {
-        width: 95%;
-        padding: 10px;
+    .content-container {
+        flex-direction: column;
     }
+    
+    .molstar-container,
+    .datatable-container {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+/* Global Container */
+#page-content {
+    width: 90%; /* Full-width layout for other pages */
+    margin: 50px ;
+
+}
+
+/* Specific Variants Page Container */
+.variants-page-container {
+    max-width: 90%; /* Adjust to control the width */
+    margin: 0 auto; /* Center the content */
+    padding: 10px;
 }

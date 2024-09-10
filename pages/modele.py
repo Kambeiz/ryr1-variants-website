@@ -16,11 +16,11 @@ layout = html.Div([
         ],
         # value='modeles_ryr1_human/Human_7M6A_fullv2_minimise.pdb',
         value = None,
-        style={'width': '60vh'}
+        style={'width': '85vh'}
     ),
     dash_molstar.MolstarViewer(
         id='model-viewer',
-        style={'width': '85vh%', 'height': '68vh'},
+        style={'width': '85vh', 'height': '60vh'},
         layout={
             'showSequence': True,
             'layoutShowControls': True,

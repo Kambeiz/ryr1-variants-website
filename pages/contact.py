@@ -8,7 +8,6 @@ layout = html.Div([
              'Machine Learning prenant en compte les spécificités structurelles de la protéine.'),
     html.H3('Coordonnées'),
     html.P('Email : debbah.nagi@gmail.com'),
-    html.P('Téléphone : +33 06 14 70 19'),
     html.H3('Affiliation'),
     html.P('Université Grenoble-Alpes'),
     html.H3('Publications'),
